@@ -9,17 +9,14 @@ mapa = {
 	6: [[2, 3], [6]],
 	7: [[7]],
 	8: [[2, 4], [2, 2, 2], [8]],
-	9:[[3, 3], [9]],
+	9: [[3, 3], [9]],
 	}
 
 def gerador():
 	df = random.choice(list(mapa.keys()))
 	fac = random.choice(mapa[df])
-
-	uns = random.randint(0, 3)
 	um = [1 for i in range(0, random.randint(1, 2))]
-	alg = [*fac, *um]
-	numero = "".join([*[str(i) for i in alg], str(df)])
+	numero = "".join([*[str(i) for i in [*fac, *um]], str(df)])
 	return  list(numero)
 
 def continuar():
@@ -34,8 +31,7 @@ def pergunta():
 	indice = random.randint(0, len(numero)-1)
 	falta = copy.copy(numero[indice])
 	numero[indice] = "A"
-	novo = "".join(numero)
-	a = input(f"Seja {novo} um número interessante. Qual é o valor de A? ")
+	a = input(f"Seja {"".join(numero)} um número interessante. Qual é o valor de A? ")
 	if a == falta:
 		print("Você acertou!!")
 	else:
