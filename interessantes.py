@@ -54,7 +54,7 @@ def pergunta_2():
     falta = copy(escolha[indice])
     escolha[indice] = "A"
     novo = "".join(escolha)
-    a = input(f"A soma dos números {n_1} e {novo} é um numero interessante. Qual é o valor de A? ")
+    a = input(f"A soma dos números {n_1} e {novo} é um número interessante. Qual é o valor de A? ")
     if a == falta:
         print("Você acertou!!")
     else:
