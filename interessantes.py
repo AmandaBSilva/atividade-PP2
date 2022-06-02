@@ -103,8 +103,8 @@ Obs: Nesse jogo não há números interessantes que terminam com 0 ou 1
             k=1
         )[0]
         pergunta()
-        print("---------------------------------------")
         cont = continuar()
+        print("---------------------------------------")
 
 
 if __name__ == "__main__":
