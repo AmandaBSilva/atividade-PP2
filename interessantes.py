@@ -88,12 +88,14 @@ def pergunta_3():
 
 def main():
     cont = True
-    print("""Um número inteiro positivo é chamado interessante quando termina
-com um algarismo que é igual ao produto de seus demais algarismo. """)
-    print("Exemplo:")
-    print("326 é interessante pois 3 * 2 = 6")
-    print("Obs: Nesse jogo não há números interessantes que terminam com 0 ou 1")
-    print("---------------------------------")
+    print(
+"""Um número inteiro positivo é chamado interessante quando termina
+com um algarismo que é igual ao produto de seus demais algarismo. 
+Exemplo:
+13126 é interessante pois 1* 3 * 1 * 2 = 6.
+Obs: Nesse jogo não há números interessantes que terminam com 0 ou 1
+"""
+)
     while cont:
         pergunta = random.choices(
             [pergunta_1, pergunta_2, pergunta_3],
@@ -101,7 +103,7 @@ com um algarismo que é igual ao produto de seus demais algarismo. """)
             k=1
         )[0]
         pergunta()
-        print("---------------------------------")
+        print("---------------------------------------")
         cont = continuar()
 
 
