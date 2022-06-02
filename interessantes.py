@@ -17,17 +17,18 @@ mapa = {
 pesos = [1, 1, 2, 1, 2, 1, 3, 2]
 
 
-def gerador():
-    df = random.choices(list(mapa.keys()), pesos, k=1)[0]
-    alg = [
-        *random.choice(mapa[df]),
+def gerador() -> str:
+    digito = random.choices(list(mapa.keys()), pesos, k=1)[0]
+    fatores = [
+        *random.choice(mapa[digito]),
         *['1' for i in range(0, random.randint(0, 2))]
     ]
-    return "".join([*alg, df])
+    random.shuffle(fatores)
+    return "".join([*fatores, digito])
 
 
-def continuar():
-    r = input("Deseja continuar? ")
+def continuar() -> bool:
+    r = input("Deseja continuar?(n para não, e qualquer tecla para sim) ")
     if r in ["n", "Não", "não", "nao"]:
         print(f"Você fez {PONTOS} pontos")
         return False
@@ -35,39 +36,54 @@ def continuar():
         return True
 
 
-def pergunta_1():
+def mensagem(a: str, apagado: str, qt=20):
     global PONTOS
-    numero = list(gerador())
-    indice = random.randint(0, len(numero)-1)
-    falta = copy(numero[indice])
-    numero[indice] = "A"
-    novo = "".join(numero)
-    a = input(f"Seja {novo} um número interessante. Qual é o valor de A? ")
-    if a == falta:
-        PONTOS = PONTOS + 10
+    if a == apagado:
+        PONTOS += qt
         print("Você acertou!!")
     else:
-        PONTOS = PONTOS - 5
-        print(f"Você errou. A resposta certa é {falta}")
+        PONTOS -= 5
+        print(f"Você errou. A resposta certa é {apagado}")
+
+
+def ocultar(numero: list) -> tuple:
+    indice = random.randint(0, len(numero)-1)
+    apagado = copy(numero[indice])
+    numero[indice] = "A"
+    sem_digito = "".join(numero)
+    return apagado, sem_digito
+
+
+def pergunta_1():
+    interessante = list(gerador())
+    apagado, sem_digito = ocultar(interessante)
+
+    a = input(f"Seja {sem_digito} um número interessante. Qual é o valor de A? ")
+    mensagem(a, apagado, 10)
 
 
 def pergunta_2():
-    global PONTOS
-    numero = int(gerador())
-    n_1 = random.randint(100, numero)
-    n_2 = numero - n_1
-    escolha = list(str(n_2))
-    indice = random.randint(0, len(escolha)-1)
-    falta = copy(escolha[indice])
-    escolha[indice] = "A"
-    novo = "".join(escolha)
-    a = input(f"A soma dos números {n_1} e {novo} é um numero interessante. Qual é o valor de A? ")
-    if a == falta:
-        PONTOS = PONTOS + 20
-        print("Você acertou!!")
+    interessante = int(gerador())
+    n_1 = random.randint(100, interessante)
+    subtração = list(str(interessante - n_1))
+    apagado, sem_digito = ocultar(subtração)
+
+    a = input(f"A soma dos números {n_1} e {sem_digito} é um numero interessante. Qual é o valor de A? ")
+    mensagem(a, apagado)
+
+
+def pergunta_3():
+    interessante = int(gerador())
+    for n in [2, 3, 5, 7]:
+        if interessante % n == 0:
+            fator = n
+            q = list(str(int(interessante/n)))
+            apagado, sem_digito = ocultar(q)
+            a = input(f"O número {sem_digito} vezes {fator} é igual a um número interessante. Qual é o valor de A? ")
+            mensagem(a, apagado)
+            break
     else:
-        PONTOS = PONTOS - 5
-        print(f"Você errou. A resposta certa é {falta}")
+        pergunta_3()
 
 
 def main():
@@ -79,9 +95,15 @@ com um algarismo que é igual ao produto de seus demais algarismo. """)
     print("Obs: Nesse jogo não há números interessantes que terminam com 0 ou 1")
     print("---------------------------------")
     while cont:
-        escolha = random.choices([pergunta_1, pergunta_2], weights=[4, 1], k=1)[0]
-        escolha()
+        pergunta = random.choices(
+            [pergunta_1, pergunta_2, pergunta_3],
+            weights=[4, 2, 1],
+            k=1
+        )[0]
+        pergunta()
+        print("---------------------------------")
         cont = continuar()
 
 
-main()
+if __name__ == "__main__":
+    main()
