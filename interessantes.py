@@ -77,7 +77,7 @@ def pergunta_3():
     for n in [2, 3, 5, 7]:
         if interessante % n == 0:
             fator = n
-            q = list(str(int(interessante/n)))
+            q = list(str(interessante//n))
             apagado, sem_digito = ocultar(q)
             a = input(f"O número {sem_digito} vezes {fator} é igual a um número interessante. Qual é o valor de A? ")
             mensagem(a, apagado)
