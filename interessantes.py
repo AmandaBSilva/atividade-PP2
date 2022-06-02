@@ -68,7 +68,7 @@ def pergunta_2():
     subtração = list(str(interessante - n_1))
     apagado, sem_digito = ocultar(subtração)
 
-    a = input(f"A soma dos números {n_1} e {sem_digito} é um numero interessante. Qual é o valor de A? ")
+    a = input(f"A soma dos números {n_1} e {sem_digito} é um número interessante. Qual é o valor de A? ")
     mensagem(a, apagado)
 
 
