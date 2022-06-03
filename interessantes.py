@@ -17,7 +17,7 @@ mapa = {
 pesos = [1, 1, 2, 1, 2, 1, 3, 2]
 
 
-def gerador() -> str:
+def gerar_numero_interessante() -> str:
     digito = random.choices(list(mapa.keys()), pesos, k=1)[0]
     fatores = [
         *random.choice(mapa[digito]),
@@ -28,83 +28,76 @@ def gerador() -> str:
 
 
 def continuar() -> bool:
-    r = input("Deseja continuar?(n para não, e qualquer tecla para sim) ")
-    if r in ["n", "Não", "não", "nao"]:
+    r = input("Deseja continuar?(n para não, qualquer outra tecla para sim) ")
+    if r.lower() == "n":
         print(f"Você fez {PONTOS} pontos")
         return False
     else:
         return True
 
 
-def mensagem(a: str, apagado: str, qt=20):
+def verificar_resposta(resposta: str, algarismo: str, pt=20) -> None:
     global PONTOS
-    if a == apagado:
-        PONTOS += qt
+    if resposta == algarismo:
+        PONTOS += pt
         print("Você acertou!!")
     else:
         PONTOS -= 5
-        print(f"Você errou. A resposta certa é {apagado}")
+        print(f"Você errou. A resposta certa é {algarismo}")
 
 
-def ocultar(numero: list) -> tuple:
+def ocultar_algarismo(numero: list) -> tuple:
     indice = random.randint(0, len(numero)-1)
-    apagado = copy(numero[indice])
+    algarismo = copy(numero[indice])
     numero[indice] = "A"
-    sem_digito = "".join(numero)
-    return apagado, sem_digito
+    oculto = "".join(numero)
+    return algarismo, oculto
 
 
-def pergunta_1():
-    interessante = list(gerador())
-    apagado, sem_digito = ocultar(interessante)
-
-    a = input(f"Seja {sem_digito} um número interessante. Qual é o valor de A? ")
-    mensagem(a, apagado, 10)
-
-
-def pergunta_2():
-    interessante = int(gerador())
-    n_1 = random.randint(100, interessante)
-    subtração = list(str(interessante - n_1))
-    apagado, sem_digito = ocultar(subtração)
-
-    a = input(f"A soma dos números {n_1} e {sem_digito} é um número interessante. Qual é o valor de A? ")
-    mensagem(a, apagado)
+def pergunta_1() -> None:
+    interessante = list(gerar_numero_interessante())
+    algarismo, oculto = ocultar_algarismo(interessante)
+    r = input(f"Seja {oculto} um número interessante. Qual é o valor de A? ")
+    verificar_resposta(r, algarismo, 10)
 
 
-def pergunta_3():
-    interessante = int(gerador())
+def pergunta_2() -> None:
+    interessante = int(gerar_numero_interessante())
+    n1 = random.randint(100, interessante)
+    n2 = interessante - n1
+    algarismo, oculto = ocultar_algarismo(list(str(n2)))
+    r = input(f"A soma dos números {n1} e {oculto} é um numero interessante. Qual é o valor de A? ")
+    verificar_resposta(r, algarismo)
+
+
+def pergunta_3() -> None:
+    interessante = int(gerar_numero_interessante())
     for n in [2, 3, 5, 7]:
         if interessante % n == 0:
-            fator = n
-            q = list(str(interessante//n))
-            apagado, sem_digito = ocultar(q)
-            a = input(f"O número {sem_digito} vezes {fator} é igual a um número interessante. Qual é o valor de A? ")
-            mensagem(a, apagado)
+            quociente = interessante//n
+            algarismo, oculto = ocultar_algarismo(list(str(quociente)))
+            r = input(f"O número {oculto} vezes {n} é igual a um número interessante. Qual é o valor de A? ")
+            verificar_resposta(r, algarismo)
             break
     else:
         pergunta_3()
 
 
-def main():
+def main() -> None:
     cont = True
-    print(
-"""Um número inteiro positivo é chamado interessante quando termina
-com um algarismo que é igual ao produto de seus demais algarismo. 
+    print("""Um número inteiro positivo é chamado interessante quando termina
+com um algarismo que é igual ao produto de seus demais algarismo.
 Exemplo:
 13126 é interessante pois 1* 3 * 1 * 2 = 6.
 Obs: Nesse jogo não há números interessantes que terminam com 0 ou 1
-"""
-)
+""")
     while cont:
-        pergunta = random.choices(
-            [pergunta_1, pergunta_2, pergunta_3],
-            weights=[4, 2, 1],
-            k=1
-        )[0]
+        pergunta = random.choices([pergunta_1, pergunta_2, pergunta_3],
+                                  weights=[4, 2, 1],
+                                  k=1)[0]
         pergunta()
         cont = continuar()
-        print("---------------------------------------")
+        print("--------------------------------------------------------------")
 
 
 if __name__ == "__main__":
