@@ -1,5 +1,5 @@
 import random
-from copy import copy
+from functools import reduce
 
 PONTOS = 0
 
@@ -18,13 +18,43 @@ pesos = [1, 1, 2, 1, 2, 1, 3, 2]
 
 
 def gerar_numero_interessante() -> str:
-    digito = random.choices(list(mapa.keys()), pesos, k=1)[0]
+    digito = random.choices(list(mapa), pesos, k=1)[0]
     fatores = [
         *random.choice(mapa[digito]),
         *['1' for i in range(0, random.randint(0, 2))]
     ]
     random.shuffle(fatores)
     return "".join([*fatores, digito])
+
+
+def ocultar_algarismo(numero: list) -> tuple:
+    indice = random.randrange(len(numero))
+    algarismo = f"{numero[indice]}"
+    numero[indice] = "A"
+    oculto = "".join(numero)
+    return algarismo, oculto
+
+
+def verificar_resposta(resposta: str, oculto: str, func) -> bool:
+    nova = list(oculto)
+    d = nova.index("A")
+    nova[d] = resposta
+    m = [int(i) for i in str(func(int("".join(nova))))]
+    a = reduce(lambda x, y: x * y, m[:-1], 1)
+    if a == m[-1]:
+        return True
+    else:
+        return False
+
+
+def alterar_pontuacao(resposta: bool, algarismo: str, pt=20) -> None:
+    global PONTOS
+    if resposta:
+        PONTOS += pt
+        print("Você acertou!!")
+    else:
+        PONTOS -= 5
+        print(f"Você errou. A resposta certa é {algarismo}")
 
 
 def continuar() -> bool:
@@ -36,29 +66,12 @@ def continuar() -> bool:
         return True
 
 
-def verificar_resposta(resposta: str, algarismo: str, pt=20) -> None:
-    global PONTOS
-    if resposta == algarismo:
-        PONTOS += pt
-        print("Você acertou!!")
-    else:
-        PONTOS -= 5
-        print(f"Você errou. A resposta certa é {algarismo}")
-
-
-def ocultar_algarismo(numero: list) -> tuple:
-    indice = random.randint(0, len(numero)-1)
-    algarismo = copy(numero[indice])
-    numero[indice] = "A"
-    oculto = "".join(numero)
-    return algarismo, oculto
-
-
 def pergunta_1() -> None:
     interessante = list(gerar_numero_interessante())
     algarismo, oculto = ocultar_algarismo(interessante)
     r = input(f"Seja {oculto} um número interessante. Qual é o valor de A? ")
-    verificar_resposta(r, algarismo, 10)
+    b = verificar_resposta(r, oculto, lambda x: x)
+    alterar_pontuacao(b, algarismo, 10)
 
 
 def pergunta_2() -> None:
@@ -67,7 +80,8 @@ def pergunta_2() -> None:
     n2 = interessante - n1
     algarismo, oculto = ocultar_algarismo(list(str(n2)))
     r = input(f"A soma dos números {n1} e {oculto} é um numero interessante. Qual é o valor de A? ")
-    verificar_resposta(r, algarismo)
+    b = verificar_resposta(r, oculto, lambda x: x + n1)
+    alterar_pontuacao(b, algarismo)
 
 
 def pergunta_3() -> None:
@@ -77,7 +91,8 @@ def pergunta_3() -> None:
             quociente = interessante//n
             algarismo, oculto = ocultar_algarismo(list(str(quociente)))
             r = input(f"O número {oculto} vezes {n} é igual a um número interessante. Qual é o valor de A? ")
-            verificar_resposta(r, algarismo)
+            b = verificar_resposta(r, oculto, lambda x: x * n)
+            alterar_pontuacao(b, algarismo)
             break
     else:
         pergunta_3()
