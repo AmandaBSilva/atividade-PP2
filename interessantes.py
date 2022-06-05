@@ -76,7 +76,7 @@ def pergunta_2() -> None:
     n1 = random.randint(100, interessante)
     n2 = interessante - n1
     algarismo, oculto = ocultar_algarismo(list(str(n2)))
-    r = input(f"A soma dos números {n1} e {oculto} é um numero interessante. Qual é o valor de A? ")
+    r = input(f"A soma dos números {n1} e {oculto} é um número interessante. Qual é o valor de A? ")
     b = verificar_resposta(r, oculto, lambda x: x + n1)
     alterar_pontuacao(b, algarismo)
 
