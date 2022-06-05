@@ -41,10 +41,7 @@ def verificar_resposta(resposta: str, oculto: str, func) -> bool:
     nova[d] = resposta
     m = [int(i) for i in str(func(int("".join(nova))))]
     a = reduce(lambda x, y: x * y, m[:-1], 1)
-    if a == m[-1]:
-        return True
-    else:
-        return False
+    return a == m[-1]
 
 
 def alterar_pontuacao(resposta: bool, algarismo: str, pt=20) -> None:
