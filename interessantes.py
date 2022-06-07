@@ -39,7 +39,12 @@ def verificar_resposta(resposta: str, oculto: str, func) -> bool:
     nova = list(oculto)
     d = nova.index("A")
     nova[d] = resposta
-    m = [int(i) for i in str(func(int("".join(nova))))]
+    try:
+        original = int("".join(nova))
+    except ValueError:
+        return False
+	interessante = str(func(original))
+    m = [int(i) for i in interessante]
     a = reduce(lambda x, y: x * y, m[:-1], 1)
     return a == m[-1]
 
