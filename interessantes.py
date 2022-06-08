@@ -2,6 +2,7 @@ import random
 from functools import reduce
 
 PONTOS = 0
+VIDAS = 3
 
 mapa = {
     "2": [["1", "2"]],
@@ -51,15 +52,18 @@ def verificar_resposta(resposta: str, oculto: str, func) -> bool:
 
 def alterar_pontuacao(resposta: bool, algarismo: str, pt=20) -> None:
     global PONTOS
+    global VIDAS
     if resposta:
         PONTOS += pt
         print("Você acertou!!")
     else:
-        PONTOS -= 5
+        VIDAS -= 1
         print(f"Você errou. A resposta certa é {algarismo}")
 
 
 def continuar() -> bool:
+    if VIDAS == 0:
+        return False
     r = input("Deseja continuar?(n para não, qualquer outra tecla para sim) ")
     if r.lower() == "n":
         print(f"Você fez {PONTOS} pontos")
