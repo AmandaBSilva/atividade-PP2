@@ -63,6 +63,7 @@ def alterar_pontuacao(resposta: bool, algarismo: str, pt=20) -> None:
 
 def continuar() -> bool:
     if VIDAS == 0:
+        print("Suas vidas acabaram")
         return False
     r = input("Deseja continuar?(n para não, qualquer outra tecla para sim) ")
     if r.lower() == "n":
